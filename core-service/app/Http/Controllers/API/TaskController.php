@@ -57,7 +57,7 @@ class TaskController extends BaseController
     public function update(Request $request, Task $task): JsonResponse
     {
         $input = $request->all();
-
+        $user_id = $request->user()->id;
         $validator = Validator::make($input, [
             'name' => 'required',
             'description' => 'required',
@@ -65,6 +65,10 @@ class TaskController extends BaseController
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        if ($task->user_id != $user_id) {
+            return $this->sendError('Error users can only edit own tasks', [], 401);
         }
 
         if (array_key_exists('user_id', $input)) {
@@ -87,8 +91,12 @@ class TaskController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task): JsonResponse
+    public function destroy(Request $request, Task $task): JsonResponse
     {
+        $user_id = $request->user()->id;
+        if ($task->user_id != $user_id) {
+            return $this->sendError('Error users can only delete own tasks', [], 401);
+        }
         $task->delete();
 
         return $this->sendResponse([], 'Task deleted successfully.');
