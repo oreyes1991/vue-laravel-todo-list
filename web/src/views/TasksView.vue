@@ -5,8 +5,12 @@
       <v-col>
         <h1>Welcome {{ user }}</h1>
       </v-col>
-      <v-col cols="3" />
-      <v-col cols="3" />
+      <v-col cols="4" />
+      <v-col cols="2">
+        <v-btn variant="outlined" @click="setFormOpen">
+          add new task
+        </v-btn>
+      </v-col>
       <v-col cols="2">
         <v-btn variant="outlined" :onclick="logout">
           sign out
@@ -15,12 +19,22 @@
     </v-row>
   </v-container>
   <TaskList />
+  <TaskFormModal :task="getSelectedTask()" :is-open="!!getIsFormOpen()" :on-close="closeForm" />
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { mapMutations } from "vuex";
+  import { mapMutations, mapGetters } from "vuex";
   import TaskList from '../components/TaskList.vue';
+  import TaskFormModal from '../components/TaskFormModal.vue';
+
+  type Task = {
+    name: string;
+    description: string;
+    completed_at: string;
+    id: number;
+  };
+
 
   export default defineComponent({
     name: 'TaskView',
@@ -31,15 +45,20 @@
       } 
     },
     methods: {
-      ...mapMutations(["setUser", "setToken"]),
+      ...mapMutations(["setUser", "setToken", "setFormOpen", "setFormClose"]),
+      ...mapGetters(['getIsFormOpen', 'getSelectedTask']),
       logout() {
         this.setToken(null);
         this.setUser(null);
         this.$router.push('/login');
       },
+      closeForm() {
+        this.setFormClose();
+      },
     },
     components: {
       TaskList,
+      TaskFormModal,
     }
   })
 </script>

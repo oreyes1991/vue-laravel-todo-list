@@ -7,14 +7,23 @@ type Task = {
   id: number;
 }
 const defaultItems: Task[] = [];
+const defaultSelectedTask = undefined as Task | undefined;
 
 export default createStore({
   state: {
     user: null,
     token: null,
     tasks: defaultItems,
+    isFormOpen: false,
+    selectedTask: defaultSelectedTask,
   },
   getters: {
+    getSelectedTask(state) {
+      return state.selectedTask;
+    },
+    getIsFormOpen(state) {
+      return state.isFormOpen;
+    }
   },
   mutations: {
     setUser(state, user) {
@@ -33,8 +42,22 @@ export default createStore({
         localStorage.setItem('token', token);
       }
     },
-    setTasks(state, tasks: Task[]) {
-      state.tasks = tasks;
+    setTasks(state, tasks: Task[]) {      
+      return state.tasks = tasks;
+    },
+    setFormOpen(state) {
+      return state.isFormOpen = true;
+    },
+    setFormClose(state) {
+      state.selectedTask = undefined;
+      state.isFormOpen = false;
+    },
+    setSelectedTask(state, task: Task) {
+      state.isFormOpen = true;
+      state.selectedTask = task;
+      console.log(task);
+      
+      return state;
     }
   },
   actions: {

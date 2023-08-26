@@ -58,7 +58,6 @@ class TaskController extends BaseController
     {
         $input = $request->all();
         $user_id = $request->user()->id;
-        echo(array_key_exists('name', $input));
         $validator = Validator::make($input, [
             'name' => 'required',
             'description' => 'required',

@@ -32,6 +32,7 @@
           :description="item.description"
           :id="item.id"
           :completed_at="item.completed_at"
+          @edit-task="editTask"
         />
       </template>
     </v-virtual-scroll>
@@ -40,6 +41,7 @@
 
 <script lang="ts">
   import TaskItem from './TaskItem.vue';
+  import { defineComponent } from 'vue';
 
   type Task = {
     name: string;
@@ -48,7 +50,7 @@
     id: number;
   }
   const defaultItems: Task[] = [];
-  export default {
+  export default defineComponent({
     data: () => ({
       items: defaultItems,
     }),
@@ -71,8 +73,16 @@
       const { data } = await rawResponse.json();
       this.items = data;
     },
+    emits: ['editTask'],
+    methods:{
+      editTask(task: unknown) {
+        console.log('edit on task list?');
+        
+        this.$emit('editTask', task)
+      }
+    },
     components: {
       TaskItem,
     }
-  }
+  });
 </script>
