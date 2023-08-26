@@ -47,13 +47,8 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue';
-
-  type Task = {
-    name: string;
-    description: string;
-    completed_at: string;
-    id: number;
-  };
+  import { mapMutations } from 'vuex';
+  import { Task } from '../commons/apiTypes';
 
   export default defineComponent({
     props: {
@@ -68,6 +63,7 @@
       }
     },
     methods: {
+      ...mapMutations(['addTask', 'updateTask']),
       async createTask() {
         const token = localStorage.getItem('token');
         const baseURL = 'http://localhost:80/api/task';
@@ -84,6 +80,7 @@
             })
           });
           const { data } = await rawResponse.json();
+          this.addTask(data);
         } else {
           const rawResponse = await fetch(`${baseURL}/${this.task.id}`, {
             method: "PATCH",
@@ -97,12 +94,9 @@
             })
           });
           const { data } = await rawResponse.json();
-          //console.log(data);
-          
+          this.updateTask(data);
         }
-        
         this.onClose?.();
-        // TODO: handle data
       }
     }
   });

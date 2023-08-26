@@ -60,7 +60,7 @@ import { mapMutations } from "vuex";
         }
     },
     methods: {
-      ...mapMutations(["setFormOpen", "setSelectedTask"]),
+      ...mapMutations(['setFormOpen', 'setSelectedTask', 'updateTask', 'removeTask']),
       async complete() {
         const token = localStorage.getItem('token');
          const rawResponse = await fetch(`http://localhost:80/api/task/${this.id}`, {
@@ -75,9 +75,8 @@ import { mapMutations } from "vuex";
             completed_at: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
           }),
         });
-        // TODO: add this to the store
         const { data } = await rawResponse.json();
-        console.log(data);
+        this.updateTask(data);
       },
       async deleteTask() {
         const token = localStorage.getItem('token');
@@ -87,9 +86,8 @@ import { mapMutations } from "vuex";
             Authorization: `Bearer ${token}`,
           },
         });
-        // TODO: add this to the store
         const { data } = await rawResponse.json();
-        console.log(data);
+        this.removeTask(this.id);
       },
       editTask() {
         this.setSelectedTask(this.task);

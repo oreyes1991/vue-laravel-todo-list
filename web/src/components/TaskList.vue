@@ -6,7 +6,7 @@
     <v-card-title>TODOs:</v-card-title>
     <v-divider></v-divider>
     <v-virtual-scroll
-      :items="todo"
+      :items="(getTodoTasks() as Task[])"
       height="320"
       item-height="48"
     >
@@ -22,7 +22,7 @@
     <v-card-title>Completed:</v-card-title>
     <v-divider></v-divider>
     <v-virtual-scroll
-      :items="completed"
+      :items="(getCompletedTasks() as Task[])"
       height="320"
       item-height="48"
     >
@@ -32,7 +32,6 @@
           :description="item.description"
           :id="item.id"
           :completed_at="item.completed_at"
-          @edit-task="editTask"
         />
       </template>
     </v-virtual-scroll>
@@ -42,25 +41,12 @@
 <script lang="ts">
   import TaskItem from './TaskItem.vue';
   import { defineComponent } from 'vue';
-
-  type Task = {
-    name: string;
-    description: string;
-    completed_at: string;
-    id: number;
-  }
-  const defaultItems: Task[] = [];
+  import { mapMutations, mapGetters } from 'vuex';
+  import { Task } from '../commons/apiTypes';
   export default defineComponent({
-    data: () => ({
-      items: defaultItems,
-    }),
-    computed: {
-      todo() {
-        return this.items.filter((item) => !item.completed_at);
-      },
-      completed() {
-        return this.items.filter((item) => !!item.completed_at);
-      }
+    methods: {
+      ...mapMutations(['setTasks']),
+      ...mapGetters(['getTodoTasks', 'getCompletedTasks'])
     },
     async mounted() {
       const token = localStorage.getItem('token');
@@ -71,15 +57,7 @@
         }
       });
       const { data } = await rawResponse.json();
-      this.items = data;
-    },
-    emits: ['editTask'],
-    methods:{
-      editTask(task: unknown) {
-        console.log('edit on task list?');
-        
-        this.$emit('editTask', task)
-      }
+      this.setTasks(data);
     },
     components: {
       TaskItem,
