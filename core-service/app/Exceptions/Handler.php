@@ -18,6 +18,11 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+
+    protected function shouldReturnJson($request, Throwable $e)
+    {
+        return true;
+    }
     /**
      * Register the exception handling callbacks for the application.
      */

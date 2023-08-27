@@ -38,7 +38,7 @@ class TaskController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError('Validation Error.', $validator->errors(), 400);
         }
 
         $task = Task::create($input);
@@ -64,7 +64,7 @@ class TaskController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError('Validation Error.', $validator->errors(), 400);
         }
 
         if ($task->user_id != $user_id) {
@@ -72,7 +72,7 @@ class TaskController extends BaseController
         }
 
         if (array_key_exists('user_id', $input)) {
-            return $this->sendError('Error not additional properties allow', []);
+            return $this->sendError('Error not additional properties allow', [], 400);
         }
 
         $task->name = $input['name'];
