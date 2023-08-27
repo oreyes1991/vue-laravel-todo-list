@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { Task } from '../commons/apiTypes';
+import { Task } from '../commons/common';
 
 const defaultItems: Task[] = [];
 const defaultSelectedTask = undefined as Task | undefined;

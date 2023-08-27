@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts">
+  import { apiURL } from '@/commons/common';
   import { defineComponent } from 'vue';
   import { mapMutations } from "vuex";
 
@@ -36,8 +37,7 @@
     methods: {
       ...mapMutations(["setUser", "setToken"]),
       async login() {
-        // TODO: add this to env vars
-        const rawResponse = await fetch('http://localhost:80/api/login', {
+        const rawResponse = await fetch(`${apiURL}/login`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json",
@@ -53,8 +53,6 @@
           return;
         }
         const { name, token } = parsedResponse.data;
-        console.log(name, token);
-        
         this.setUser(name);
         this.setToken(token);
         this.$router.push("/");

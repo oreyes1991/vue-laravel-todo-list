@@ -42,7 +42,7 @@
   import TaskItem from './TaskItem.vue';
   import { defineComponent } from 'vue';
   import { mapMutations, mapGetters } from 'vuex';
-  import { Task } from '../commons/apiTypes';
+  import { Task, apiURL } from '../commons/common';
   export default defineComponent({
     methods: {
       ...mapMutations(['setTasks']),
@@ -50,7 +50,7 @@
     },
     async mounted() {
       const token = localStorage.getItem('token');
-      const rawResponse = await fetch('http://localhost:80/api/task', {
+      const rawResponse = await fetch(`${apiURL}/task`, {
         method: "GET",
         headers: { 
           Authorization: `Bearer ${token}`,

@@ -48,7 +48,7 @@
 <script lang="ts">
   import { defineComponent, PropType } from 'vue';
   import { mapMutations } from 'vuex';
-  import { Task } from '../commons/apiTypes';
+  import { Task, apiURL } from '../commons/common';
 
   export default defineComponent({
     props: {
@@ -66,9 +66,9 @@
       ...mapMutations(['addTask', 'updateTask']),
       async createTask() {
         const token = localStorage.getItem('token');
-        const baseURL = 'http://localhost:80/api/task';
+        const url = `${apiURL}/task`;
         if (!this.task) {
-          const rawResponse = await fetch(baseURL, {
+          const rawResponse = await fetch(url, {
             method: "POST",
             headers: { 
               "Content-Type": "application/json",
@@ -82,7 +82,7 @@
           const { data } = await rawResponse.json();
           this.addTask(data);
         } else {
-          const rawResponse = await fetch(`${baseURL}/${this.task.id}`, {
+          const rawResponse = await fetch(`${url}/${this.task.id}`, {
             method: "PATCH",
             headers: { 
               "Content-Type": "application/json",

@@ -22,7 +22,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { apiURL } from '@/commons/common';
+import { defineComponent } from 'vue';
   import { mapMutations } from "vuex";
 
   export default defineComponent({
@@ -38,7 +39,7 @@
       ...mapMutations(["setUser", "setToken"]),
       async register() {
         // TODO: add this to env vars
-        const rawResponse = await fetch('http://localhost:80/api/register', {
+        const rawResponse = await fetch(`${apiURL}/register`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json",

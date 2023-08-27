@@ -40,6 +40,7 @@
 import format from 'date-fns/format';
 import { defineComponent } from 'vue';
 import { mapMutations } from "vuex";
+import { apiURL } from '../commons/common';
 
   export default defineComponent({
     props: {
@@ -63,7 +64,7 @@ import { mapMutations } from "vuex";
       ...mapMutations(['setFormOpen', 'setSelectedTask', 'updateTask', 'removeTask']),
       async complete() {
         const token = localStorage.getItem('token');
-         const rawResponse = await fetch(`http://localhost:80/api/task/${this.id}`, {
+         const rawResponse = await fetch(`${apiURL}/task/${this.id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +81,7 @@ import { mapMutations } from "vuex";
       },
       async deleteTask() {
         const token = localStorage.getItem('token');
-        const rawResponse = await fetch(`http://localhost:80/api/task/${this.id}`, {
+        const rawResponse = await fetch(`${apiURL}/task/${this.id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
