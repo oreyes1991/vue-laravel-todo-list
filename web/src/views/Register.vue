@@ -1,21 +1,21 @@
 <template>
   <v-responsive
     class="mx-auto"
-    height="100vh"
+    width="100%"
     content-class="auth-content"
+    height="100vh"
   >
     <section class="container-center">
-      <h2>Login</h2>
-      <v-form @submit.prevent="login">
+      <h2>Register:</h2>
+      <v-form @submit.prevent="register">
+        <v-text-field v-model="name" label="Name" type="text"></v-text-field>
         <v-text-field v-model="email" label="Email" type="email"></v-text-field>
         <v-text-field
         label="Password"
         type="password"
         v-model="password"
-        hint="Enter your password to access this website"
         ></v-text-field>
-        <v-btn type="submit" variant="outlined">Sign In</v-btn>
-        <v-btn @click="$router.push('/register')" variant="outlined">Register</v-btn>
+        <v-btn type="submit" variant="outlined">Sign Up</v-btn>
       </v-form>
     </section>
   </v-responsive>
@@ -26,23 +26,25 @@
   import { mapMutations } from "vuex";
 
   export default defineComponent({
-    name: 'LoginView',
+    name: 'RegisterView',
     data: () => {
       return {
+        name: "",
         email: "",
         password: "",
       }
     },
     methods: {
       ...mapMutations(["setUser", "setToken"]),
-      async login() {
+      async register() {
         // TODO: add this to env vars
-        const rawResponse = await fetch('http://localhost:80/api/login', {
+        const rawResponse = await fetch('http://localhost:80/api/register', {
           method: 'POST',
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            name: this.name,
             email: this.email,
             password: this.password,
           }),
@@ -53,8 +55,6 @@
           return;
         }
         const { name, token } = parsedResponse.data;
-        console.log(name, token);
-        
         this.setUser(name);
         this.setToken(token);
         this.$router.push("/");
@@ -62,20 +62,3 @@
     }
   });
 </script>
-
-<style lang="scss">
-  .container-center {
-    display: grid;
-    place-self: center;
-    gap: 1em;
-    justify-items: center;
-    & form {
-      min-width: 350px;
-      display: grid;
-      gap: .5em;
-    }
-  }
-  .auth-content {
-    display: grid;
-  }
-</style>

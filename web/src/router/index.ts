@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import store from '@/store/';
-import LoginView from '../views/Login.vue'
-import TaskView from '../views/TasksView.vue'
-
+import LoginView from '../views/Login.vue';
+import TaskView from '../views/TasksView.vue';
+import RegisterView from '../views/Register.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -23,6 +23,20 @@ const routes: Array<RouteRecordRaw> = [
     path: '/login',
     name: 'login',
     component: LoginView,
+    beforeEnter: (_, __, next) => {
+      const isAuth = !!store.state.token
+      const isTokenInCache = !!localStorage.getItem('token');
+      if (!isAuth && !isTokenInCache) {
+        next();
+      } else {
+        next('/');
+      }
+    }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
     beforeEnter: (_, __, next) => {
       const isAuth = !!store.state.token
       const isTokenInCache = !!localStorage.getItem('token');

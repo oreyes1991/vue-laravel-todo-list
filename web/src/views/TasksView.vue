@@ -1,23 +1,16 @@
 
 <template>
-  <v-container class="bg-surface-variant">
-    <v-row align="center">
-      <v-col>
-        <h1>Welcome {{ user }}</h1>
-      </v-col>
-      <v-col cols="4" />
-      <v-col cols="2">
-        <v-btn variant="outlined" @click="setFormOpen">
-          add new task
-        </v-btn>
-      </v-col>
-      <v-col cols="2">
-        <v-btn variant="outlined" :onclick="logout">
-          sign out
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+  <header class="main-header bg-surface-variant">
+    <h1>Welcome {{ user }}</h1>
+    <div class="header-actions">
+      <v-btn variant="outlined" @click="setFormOpen">
+        add new task
+      </v-btn>
+      <v-btn variant="outlined" :onclick="logout">
+        sign out
+      </v-btn>
+    </div>
+  </header>
   <TaskList />
   <TaskFormModal :task="getSelectedTask()" :is-open="!!getIsFormOpen()" :on-close="closeForm" />
 </template>
@@ -27,14 +20,6 @@
   import { mapMutations, mapGetters } from "vuex";
   import TaskList from '../components/TaskList.vue';
   import TaskFormModal from '../components/TaskFormModal.vue';
-
-  type Task = {
-    name: string;
-    description: string;
-    completed_at: string;
-    id: number;
-  };
-
 
   export default defineComponent({
     name: 'TaskView',
@@ -62,3 +47,26 @@
     }
   })
 </script>
+
+<style lang="scss" scoped>
+  .main-header {
+    display: grid;
+    padding: 0.5em 1em;
+    grid-template-columns: 1fr;
+    gap: 1em;
+    & button {
+      max-width: 180px;
+    }
+    & .header-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
+    }
+  }
+  /* Desktop */
+  @media only screen and (min-width: 800px) {
+    .main-header {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
